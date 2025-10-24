@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roleta de Animes - Cyberpunk</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.json">
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js')
+      .then(() => console.log('Service Worker registrado!'));
+  }
+</script>
+    <style>
+        :root {
+            --primary-color: #ff0066;
+            --secondary-color: #00ffff;
+            --bg-start: #05000a; /* Reduzido o brilho */
+            --bg-mid: #0a001a; /* Reduzido o brilho */
+            --bg-end: #05000a; /* Reduzido o brilho */
+            --panel-bg: rgba(10, 0, 20, 0.8); /* Fundo mais escuro e menos transparente */
+            --border-primary: #ff0066;
+            --border-secondary: #00ffff;
+            --text-primary: #fff;
+            --text-secondary: #00ffff;
+            --btn-primary-start: #ff0066;
+            --btn-primary-end: #ff3385;
+            --btn-secondary-start: #00ffff;
+            --btn-secondary-end: #0099cc;
+            --result-bg: #fff; /* Novo: Fundo branco para o resultado */
+            --result-text-color: #000; /* Novo: Texto preto para o resultado */
+            --result-title-color: #333; /* Novo: Cor do título do resultado */
+        }
+
+        [data-theme="classic"] {
+            --primary-color: #ff0066;
+            --secondary-color: #00ffff;
+            --bg-start: #05000a;
+            --bg-mid: #0a001a;
+            --bg-end: #05000a;
+            --panel-bg: rgba(10, 0, 20, 0.8);
+            --border-primary: #ff0066;
+            --border-secondary: #00ffff;
+            --text-primary: #fff;
+            --text-secondary: #00ffff;
+            --btn-primary-start: #ff0066;
+            --btn-primary-end: #ff3385;
+            --btn-secondary-start: #00ffff;
+            --btn-secondary-end: #0099cc;
+            --result-bg: #fff;
+            --result-text-color: #000;
+            --result-title-color: #333;
+        }
+
+        [data-theme="purple-haze"] {
+            --primary-color: #b400ff;
+            --secondary-color: #ff00ff;
+            --bg-start: #05000a;
+            --bg-mid: #0a001a;
+            --bg-end: #05000a;
+            --panel-bg: rgba(10, 0, 20, 0.8);
+            --border-primary: #b400ff;
+            --border-secondary: #ff00ff;
+            --text-primary: #fff;
+            --text-secondary: #ff00ff;
+            --btn-primary-start: #b400ff;
+            --btn-primary-end: #d633ff;
+            --btn-secondary-start: #ff00ff;
+            --btn-secondary-end: #cc00cc;
+            --result-bg: #fff;
+            --result-text-color: #000;
+            --result-title-color: #333;
+        }
+
+        [data-theme="toxic-green"] {
+            --primary-color: #00ff00;
+            --secondary-color: #39ff14;
+            --bg-start: #000500;
+            --bg-mid: #000a00;
+            --bg-end: #000500;
+            --panel-bg: rgba(0, 10, 0, 0.8);
+            --border-primary: #00ff00;
+            --border-secondary: #39ff14;
+            --text-primary: #fff;
+            --text-secondary: #39ff14;
+            --btn-primary-start: #00ff00;
+            --btn-primary-end: #33ff33;
+            --btn-secondary-start: #39ff14;
+            --btn-secondary-end: #00cc00;
+            --result-bg: #fff;
+            --result-text-color: #000;
+            --result-title-color: #333;
+        }
+
+        [data-theme="hot-red"] {
+            --primary-color: #ff0000;
+            --secondary-color: #ff6600;
+            --bg-start: #0a0000;
+            --bg-mid: #1a0000;
+            --bg-end: #0a0000;
+            --panel-bg: rgba(20, 0, 0, 0.8);
+            --border-primary: #ff0000;
+            --border-secondary: #ff6600;
+            --text-primary: #fff;
+            --text-secondary: #ff6600;
+            --btn-primary-start: #ff0000;
+            --btn-primary-end: #ff3333;
+            --btn-secondary-start: #ff6600;
+            --btn-secondary-end: #cc5200;
+            --result-bg: #fff;
+            --result-text-color: #000;
+            --result-title-color: #333;
+        }
+
+        [data-theme="ice-blue"] {
+            --primary-color: #00d4ff;
+            --secondary-color: #0099ff;
+            --bg-start: #00050a;
+            --bg-mid: #000a1a;
+            --bg-end: #00050a;
+            --panel-bg: rgba(0, 10, 20, 0.8);
+            --border-primary: #00d4ff;
+            --border-secondary: #0099ff;
+            --text-primary: #fff;
+            --text-secondary: #00d4ff;
+            --btn-primary-start: #00d4ff;
+            --btn-primary-end: #33ddff;
+            --btn-secondary-start: #0099ff;
+            --btn-secondary-end: #0077cc;
+            --result-bg: #fff;
+            --result-text-color: #000;
+            --result-title-color: #333;
+        }
+
+        [data-theme="golden-sunset"] {
+            --primary-color: #ffa500;
+            --secondary-color: #ffcc00;
+            --bg-start: #0a0500;
+            --bg-mid: #1a1000;
+            --bg-end: #0a0500;
+            --panel-bg: rgba(20, 15, 0, 0.8);
+            --border-primary: #ffa500;
+            --border-secondary: #ffcc00;
+            --text-primary: #fff;
+            --text-secondary: #ffcc00;
+            --btn-primary-start: #ffa500;
+            --btn-primary-end: #ffb733;
+            --btn-secondary-start: #ffcc00;
+            --btn-secondary-end: #cc9900;
+            --result-bg: #fff;
+            --result-text-color: #000;
+            --result-title-color: #333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', sans-serif;
+            background: linear-gradient(135deg, var(--bg-start) 0%, var(--bg-mid) 50%, var(--bg-end) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+            z-index: 0;
+            transition: background 0.5s ease;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                repeating-linear-gradient(0deg, var(--primary-color) 0px, transparent 1px, transparent 2px, var(--primary-color) 3px),
+                repeating-linear-gradient(90deg, var(--secondary-color) 0px, transparent 1px, transparent 2px, var(--secondary-color) 3px);
+            opacity: 0.01; /* Reduzido o brilho do grid */
+            pointer-events: none;
+            z-index: 1;
+            transition: background 0.5s ease;
+        }
+
+        .container {
+            max-width: 1400px;
+            width: 100%;
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            text-shadow: 0 0 10px var(--primary-color), 0 0 20px var(--primary-color); /* Reduzido o brilho do texto */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .header h1 {
+            font-size: 3.5em;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color), var(--primary-color));
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 3s ease infinite;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .header-icon {
+            width: 60px;
+            height: 60px;
+            fill: var(--primary-color);
+            filter: drop-shadow(0 0 5px var(--primary-color)); /* Reduzido o brilho do ícone */
+            transition: fill 0.5s ease, filter 0.5s ease;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 30px;
+            align-items: start;
+        }
+
+        .wheel-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: var(--panel-bg);
+            border: 2px solid var(--border-primary);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 0 20px var(--primary-color), inset 0 0 20px var(--secondary-color); /* Reduzido o brilho da sombra */
+            backdrop-filter: blur(5px); /* Reduzido o blur */
+            transition: all 0.5s ease;
+        }
+
+        .wheel-container {
+            position: relative;
+            width: 500px;
+            height: 500px;
+            margin-bottom: 30px;
+        }
+
+        #wheelCanvas {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            box-shadow: 0 0 0 10px var(--primary-color), /* Reduzido o tamanho do anel */
+                        0 0 0 13px var(--secondary-color), /* Reduzido o tamanho do anel */
+                        0 0 30px var(--primary-color); /* Reduzido o brilho da sombra */
+            transition: box-shadow 0.5s ease;
+        }
+
+        .pointer {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 25px solid transparent;
+            border-right: 25px solid transparent;
+            border-top: 50px solid var(--secondary-color);
+            filter: drop-shadow(0 0 10px var(--secondary-color)); /* Reduzido o brilho da sombra */
+            z-index: 10;
+            transition: all 0.5s ease;
+        }
+
+        .center-circle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            box-shadow: 0 0 15px var(--primary-color); /* Reduzido o brilho da sombra */
+            z-index: 5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 14px;
+            text-transform: uppercase;
+            pointer-events: none;
+            transition: all 0.5s ease;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            font-size: 18px;
+            font-weight: 700;
+            text-transform: uppercase;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+            font-family: 'Orbitron', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-icon {
+            width: 20px;
+            height: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-spin {
+            background: linear-gradient(135deg, var(--btn-primary-start), var(--btn-primary-end));
+            color: #fff;
+            box-shadow: 0 5px 15px var(--primary-color); /* Reduzido o brilho da sombra */
+        }
+
+        .btn-spin .btn-icon {
+            fill: #fff;
+        }
+
+        .btn-spin:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px var(--primary-color); /* Reduzido o brilho da sombra */
+        }
+
+        .btn-spin:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .controls-panel {
+            background: var(--panel-bg);
+            border: 2px solid var(--border-secondary);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 0 20px var(--secondary-color), inset 0 0 20px var(--primary-color); /* Reduzido o brilho da sombra */
+            backdrop-filter: blur(5px); /* Reduzido o blur */
+            transition: all 0.5s ease;
+        }
+
+        .controls-panel h2 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: var(--text-secondary);
+            text-shadow: 0 0 10px var(--secondary-color); /* Reduzido o brilho do texto */
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.5s ease;
+        }
+
+        .controls-icon {
+            width: 30px;
+            height: 30px;
+            fill: var(--text-secondary);
+            transition: fill 0.5s ease;
+        }
+
+        .theme-selector {
+            margin-bottom: 20px;
+        }
+
+        .theme-selector label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .theme-btn {
+            padding: 10px;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-family: 'Orbitron', sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .theme-btn.active {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 10px var(--secondary-color); /* Reduzido o brilho da sombra */
+        }
+
+        .theme-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .theme-classic {
+            background: linear-gradient(135deg, #ff0066, #00ffff);
+            color: #fff;
+        }
+
+        .theme-purple {
+            background: linear-gradient(135deg, #b400ff, #ff00ff);
+            color: #fff;
+        }
+
+        .theme-green {
+            background: linear-gradient(135deg, #00ff00, #39ff14);
+            color: #000;
+        }
+
+        .theme-red {
+            background: linear-gradient(135deg, #ff0000, #ff6600);
+            color: #fff;
+        }
+
+        .theme-blue {
+            background: linear-gradient(135deg, #00d4ff, #0099ff);
+            color: #fff;
+        }
+
+        .theme-gold {
+            background: linear-gradient(135deg, #ffa500, #ffcc00);
+            color: #000;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 1px;
+            transition: color 0.5s ease;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid var(--border-primary);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 14px;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--border-secondary);
+            box-shadow: 0 0 10px var(--secondary-color); /* Reduzido o brilho da sombra */
+        }
+
+        .btn-add {
+            background: linear-gradient(135deg, var(--btn-secondary-start), var(--btn-secondary-end));
+            color: #000;
+            width: 100%;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px var(--secondary-color); /* Reduzido o brilho da sombra */
+        }
+
+        .btn-add .btn-icon {
+            fill: #000;
+        }
+
+        .btn-add:hover {
+            box-shadow: 0 8px 25px var(--secondary-color); /* Reduzido o brilho da sombra */
+        }
+
+        .btn-clear {
+            background: linear-gradient(135deg, var(--btn-primary-start), var(--btn-primary-end));
+            color: #fff;
+            width: 100%;
+            box-shadow: 0 5px 15px var(--primary-color); /* Reduzido o brilho da sombra */
+        }
+
+        .btn-clear .btn-icon {
+            fill: #fff;
+        }
+
+        .btn-clear:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px var(--primary-color); /* Reduzido o brilho da sombra */
+        }
+
+        .anime-list {
+            margin-top: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .anime-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .anime-list::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+        }
+
+        .anime-list::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 10px;
+        }
+
+        .anime-item {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border-primary);
+            border-radius: 8px;
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .anime-item:hover {
+            background: var(--primary-color);
+            border-color: var(--secondary-color);
+            transform: translateX(5px);
+        }
+
+        .anime-item span {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .btn-remove {
+            background: var(--primary-color);
+            color: #fff;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-remove:hover {
+            background: var(--secondary-color);
+            color: #000;
+            transform: scale(1.1);
+        }
+
+        .remove-icon {
+            width: 14px;
+            height: 14px;
+            fill: currentColor;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            background: var(--result-bg); /* Usando nova variável */
+            border: 2px solid var(--border-secondary);
+            border-radius: 10px;
+            text-align: center;
+            display: none;
+            animation: resultPulse 1s ease-in-out;
+            transition: all 0.5s ease;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); /* Sombra para destaque */
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .result h3 {
+            color: var(--result-title-color); /* Usando nova variável */
+            font-size: 1.4em; /* Aumentado o tamanho */
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            font-weight: 900; /* Mais destaque */
+        }
+
+        .result p {
+            color: var(--result-text-color); /* Usando nova variável */
+            font-size: 2.5em; /* Aumentado o tamanho */
+            font-weight: 900;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Sombra suave para legibilidade */
+        }
+
+        @keyframes resultPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @media (max-width: 1200px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .wheel-container {
+                width: 400px;
+                height: 400px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .wheel-container {
+                width: 300px;
+                height: 300px;
+            }
+
+            .theme-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body data-theme="classic">
+    <div class="container">
+        <div class="header">
+            <svg class="header-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5zm0 2.18l8 3.6v7.22c0 4.39-3.02 8.49-8 9.74-4.98-1.25-8-5.35-8-9.74V7.78l8-3.6zM12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 2c2.21 0 4 1.79 4 4s-1.79 4-4 4-4-1.79-4-4 1.79-4 4-4z"/>
+            </svg>
+            <h1>Luiza Royale</h1>
+            <svg class="header-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5zm0 2.18l8 3.6v7.22c0 4.39-3.02 8.49-8 9.74-4.98-1.25-8-5.35-8-9.74V7.78l8-3.6zM12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 2c2.21 0 4 1.79 4 4s-1.79 4-4 4-4-1.79-4-4 1.79-4 4-4z"/>
+            </svg>
+        </div>
+
+        <div class="main-content">
+            <div class="wheel-section">
+                <div class="wheel-container">
+                    <div class="pointer"></div>
+                    <canvas id="wheelCanvas" width="500" height="500"></canvas>
+                    <div class="center-circle">SPIN</div>
+                </div>
+                <button class="btn btn-spin" id="spinBtn" onclick="spin()">
+                    <svg class="btn-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
+                    </svg>
+                    <span>Girar Roleta</span>
+                </button>
+                <div class="result" id="result">
+                    <h3>Anime Sorteado:</h3>
+                    <p id="resultText"></p>
+                </div>
+            </div>
+
+            <div class="controls-panel">
+                <h2>
+                    <svg class="controls-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+                    </svg>
+                    Configurações
+                </h2>
+
+                <div class="theme-selector">
+                    <label>Temas:</label>
+                    <div class="theme-grid">
+                        <button class="theme-btn theme-classic active" onclick="changeTheme('classic')">Classic</button>
+                        <button class="theme-btn theme-purple" onclick="changeTheme('purple-haze')">Purple Haze</button>
+                        <button class="theme-btn theme-green" onclick="changeTheme('toxic-green')">Toxic Green</button>
+                        <button class="theme-btn theme-red" onclick="changeTheme('hot-red')">Hot Red</button>
+                        <button class="theme-btn theme-blue" onclick="changeTheme('ice-blue')">Ice Blue</button>
+                        <button class="theme-btn theme-gold" onclick="changeTheme('golden-sunset')">Golden</button>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="animeInput">Adicionar :</label>
+                    <input type="text" id="animeInput" placeholder="Digite o nome do conteúdo...">
+                </div>
+                <button class="btn btn-add" onclick="addAnime()">
+                    <svg class="btn-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                    </svg>
+                    <span>Adicionar</span>
+                </button>
+                <button class="btn btn-clear" onclick="clearAll()">
+                    <svg class="btn-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+                    </svg>
+                    <span>Limpar Todos</span>
+                </button>
+
+                <div class="anime-list" id="animeList"></div>
+            </div>
+        </div>
+    </div>
+
+    <audio id="spinSound" src="roleta.mp3" preload="auto"></audio>
+
+    <script>
+        let animes = [
+            "Black Clover",
+            "JoJo’s Bizarre Adventure",
+            "Solo Leveling",
+            "Don’t Toy with Me, Miss Nagatoro",
+            "Banana Fish",
+            "Sabikui Bisco",
+            "Chainsaw Man",
+            "Kakegurui",
+            "Parasyte: The Maxim",
+            "Tokyo Revengers",
+            "Hajime no Ippo",
+            "Baki",
+            "Wonder Egg Priority",
+            "Erased",
+            "Blue Lock",
+            "Bungou Stray Dogs",
+            "Kaiju No. 8",
+            "The Promised Neverland",
+            "SPY×FAMILY",
+            "The Founder of Diabolism",
+            "Sonic X"
+        ];
+
+        let isSpinning = false;
+        let currentRotation = 0;
+        let currentTheme = 'classic';
+
+        const colors = [
+            '#ff0066', '#00ffff', '#ff3385', '#33ccff',
+            '#ff0099', '#00cccc', '#ff1a75', '#1ac6ff',
+            '#cc0052', '#0099cc', '#ff4d94', '#4dd4ff',
+            '#990040', '#007399', '#ff66a3', '#66d9ff'
+        ];
+
+        const canvas = document.getElementById('wheelCanvas');
+        const ctx = canvas.getContext('2d');
+        const spinSound = document.getElementById('spinSound');
+
+        function changeTheme(theme) {
+            currentTheme = theme;
+            document.body.setAttribute('data-theme', theme);
+            
+            // Update active theme button
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            // Usar event.target é arriscado se a função for chamada de outra forma.
+            // É mais seguro encontrar o botão pelo atributo data-theme ou pelo onclick.
+            const targetButton = document.querySelector(`.theme-grid button[onclick*="'${theme}'"]`);
+            if (targetButton) {
+                targetButton.classList.add('active');
+            }
+            
+            // Redraw wheel with theme colors
+            drawWheel();
+            
+            // Save theme preference
+            localStorage.setItem('animeWheelTheme', theme);
+        }
+
+        function drawWheel() {
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const radius = canvas.width / 2;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (animes.length === 0) {
+                ctx.fillStyle = '#1a0033';
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+                ctx.fill();
+                return;
+            }
+
+            const anglePerSegment = (2 * Math.PI) / animes.length;
+
+            animes.forEach((anime, index) => {
+                // O desenho começa em 0 (topo) e vai no sentido horário.
+                const startAngle = index * anglePerSegment + currentRotation;
+                const endAngle = startAngle + anglePerSegment;
+
+                // Draw segment
+                ctx.fillStyle = colors[index % colors.length];
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+                ctx.closePath();
+                ctx.fill();
+
+                // Draw border
+                ctx.strokeStyle = '#000';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                // Draw text
+                ctx.save();
+                ctx.translate(centerX, centerY);
+                // O texto é rotacionado para o centro do segmento
+                ctx.rotate(startAngle + anglePerSegment / 2);
+                ctx.textAlign = 'right';
+                ctx.fillStyle = '#fff';
+                ctx.font = 'bold 14px Orbitron';
+                ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+                ctx.shadowBlur = 4;
+                ctx.fillText(anime, radius - 20, 5);
+                ctx.restore();
+            });
+        }
+
+        function renderList() {
+            const list = document.getElementById('animeList');
+            list.innerHTML = '';
+            
+            animes.forEach((anime, index) => {
+                const item = document.createElement('div');
+                item.className = 'anime-item';
+                item.innerHTML = `
+                    <span>${anime}</span>
+                    <button class="btn-remove" onclick="removeAnime(${index})">
+                        <svg class="remove-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                        </svg>
+                    </button>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        function addAnime() {
+            const input = document.getElementById('animeInput');
+            const animeName = input.value.trim();
+            
+            if (animeName === '') {
+                alert('Por favor, digite o nome de um anime!');
+                return;
+            }
+            
+            if (animes.includes(animeName)) {
+                alert('Este anime já está na lista!');
+                return;
+            }
+            
+            animes.push(animeName);
+            input.value = '';
+            drawWheel();
+            renderList();
+        }
+
+        function removeAnime(index) {
+            if (animes.length <= 2) {
+                alert('A roleta precisa ter pelo menos 2 animes!');
+                return;
+            }
+            
+            animes.splice(index, 1);
+            drawWheel();
+            renderList();
+        }
+
+        function clearAll() {
+            if (confirm('Tem certeza que deseja limpar todos os animes?')) {
+                animes = [];
+                drawWheel();
+                renderList();
+                document.getElementById('result').classList.remove('show');
+            }
+        }
+
+        function spin() {
+            if (isSpinning) return;
+            
+            if (animes.length === 0) {
+                alert('Adicione pelo menos um anime para girar a roleta!');
+                return;
+            }
+            
+            isSpinning = true;
+            document.getElementById('spinBtn').disabled = true;
+            document.getElementById('result').classList.remove('show');
+            
+            // Play sound
+            spinSound.currentTime = 0;
+            spinSound.play().catch(err => console.log('Erro ao reproduzir áudio:', err));
+            
+            const randomIndex = Math.floor(Math.random() * animes.length);
+            const anglePerSegment = (2 * Math.PI) / animes.length;
+            
+            // CORREÇÃO DA LÓGICA DE ROTAÇÃO (Versão 2):
+            // 1. O ponteiro está em 0 graus (topo).
+            // 2. O segmento sorteado é 'randomIndex'.
+            // 3. O centro do segmento 'randomIndex' está em: (randomIndex * anglePerSegment) + (anglePerSegment / 2)
+            // 4. Para alinhar o centro do segmento com o topo (0 radianos), precisamos girar a roleta no sentido horário
+            //    pelo ângulo que falta para completar 2*PI a partir do centro do segmento.
+            
+            const minSpins = 5;
+            const extraRotation = Math.random() * anglePerSegment * 0.8 - anglePerSegment * 0.4; // Offset aleatório dentro do segmento
+            
+            // Ângulo do centro do segmento sorteado (em radianos)
+            const centerOfSegmentAngle = randomIndex * anglePerSegment + anglePerSegment / 2;
+            
+            // Ângulo de rotação necessário para levar o centro do segmento ao topo (0 radianos)
+            // A rotação é no sentido horário, então o ângulo é (2*PI - centerOfSegmentAngle).
+            // No entanto, como a rotação do canvas é no sentido horário, o ângulo de rotação é simplesmente o negativo do ângulo do centro do segmento.
+            // Mas como estamos somando a rotação, precisamos do ângulo positivo para girar no sentido horário.
+            // O ângulo de rotação necessário para alinhar o centro do segmento com o topo (0) é:
+            // CORREÇÃO: Adicionamos PI/2 (90 graus) ao ângulo de alinhamento.
+            // Isso compensa o desalinhamento de quadrante que está fazendo o ponteiro parar no item à direita.
+            // CORREÇÃO FINAL: Adicionamos PI (180 graus) ao ângulo de alinhamento.
+            // Isso compensa o desalinhamento de 180 graus (item oposto) que estava ocorrendo.
+            // CORREÇÃO FINAL: Adicionamos 3*PI/2 (270 graus) ao ângulo de alinhamento.
+            // Isso compensa o desalinhamento de 270 graus (ou 90 graus no sentido anti-horário) que estava ocorrendo.
+            let angleToAlignToTop = (2 * Math.PI) - centerOfSegmentAngle + (3 * Math.PI / 2);
+
+            // Normalizar o ângulo após a correção
+            angleToAlignToTop = angleToAlignToTop % (2 * Math.PI);
+            
+            // Se o ângulo for negativo (o que não deve acontecer aqui, mas por segurança)
+            if (angleToAlignToTop < 0) {
+                angleToAlignToTop += 2 * Math.PI;
+            }
+            
+            // Rotação total: Múltiplas voltas completas + ângulo de alinhamento + offset aleatório
+            // O offset aleatório garante que a roleta não pare sempre no centro exato do texto, dando um aspecto mais natural.
+            // Rotação total: Múltiplas voltas completas + ângulo de alinhamento + offset aleatório
+            // O offset aleatório garante que a roleta não pare sempre no centro exato do texto, dando um aspecto mais natural.
+            // A lógica de rotação é baseada na posição inicial (0) e a rotação acumulada é adicionada no `animate()`.
+            // O ângulo de alinhamento já inclui a correção de 270 graus.
+            // Nova lógica de rotação relativa para garantir giros múltiplos e corretos:
+            
+            // 1. Calcular o ângulo absoluto onde o item sorteado deve parar (com a correção de 270 graus).
+            const angleToStopAt = (2 * Math.PI) - centerOfSegmentAngle + (3 * Math.PI / 2);
+            
+            // 2. Calcular a diferença entre o ângulo final desejado e a rotação atual (normalizada).
+            let angleDifference = (angleToStopAt % (2 * Math.PI)) - (currentRotation % (2 * Math.PI));
+            
+            // 3. Garante que a roleta gire no sentido horário (ângulo positivo)
+            if (angleDifference < 0) {
+                angleDifference += 2 * Math.PI;
+            }
+            
+            // 4. Rotação total: Rotação atual + Múltiplas voltas completas + diferença de ângulo + offset aleatório
+            // O targetAngle deve ser o ângulo final absoluto que a roleta deve atingir.
+            const targetAngle = currentRotation + (minSpins * 2 * Math.PI) + angleDifference + extraRotation;
+            
+            const duration = 15000; // 15 segundos
+            const startTime = Date.now();
+            
+            const startRotation = currentRotation;
+            
+            function animate() {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                // Easing function
+                const easeOut = 1 - Math.pow(1 - progress, 3);
+                
+                // A rotação é acumulada
+                currentRotation = startRotation + (targetAngle - startRotation) * easeOut;
+                drawWheel();
+                
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                } else {
+                    // Stop sound when wheel stops
+                    spinSound.pause();
+                    spinSound.currentTime = 0;
+                    
+                    isSpinning = false;
+                    document.getElementById('spinBtn').disabled = false;
+                    
+                    // Normalizar a rotação final para evitar números muito grandes
+                    currentRotation = currentRotation % (2 * Math.PI);
+                    
+                    // Display the pre-selected winner
+                    document.getElementById('resultText').textContent = animes[randomIndex];
+                    document.getElementById('result').classList.add('show');
+                }
+            }
+            
+            animate();
+        }
+
+        // Permitir adicionar anime com Enter
+        document.getElementById('animeInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                addAnime();
+            }
+        });
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('animeWheelTheme');
+        if (savedTheme) {
+            document.body.setAttribute('data-theme', savedTheme);
+            currentTheme = savedTheme;
+            // Encontrar e ativar o botão de tema correto
+            const targetButton = document.querySelector(`.theme-grid button[onclick*="'${savedTheme}'"]`);
+            if (targetButton) {
+                targetButton.classList.add('active');
+            }
+        }
+
+        // Inicializar
+        drawWheel();
+        renderList();
+    </script>
+</body>
+</html>
